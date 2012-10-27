@@ -1,0 +1,4 @@
+# Useful settings (among many others)
+autodetach on
+multiuser on
+startup_message off
