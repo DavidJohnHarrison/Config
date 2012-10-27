@@ -16,5 +16,3 @@ screen -x -S $SESSION_NAME -p "$WINDOW_NAME"  # connect to new window
 bold=`tput smso`
 offbold=`tput rmso`
 echo "${bold}WARNING: YOU ARE NO LONGER IN A SCREEN SESSION!"
-echo "PRESS ENTER TO CONTINUE"
-read
