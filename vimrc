@@ -18,3 +18,15 @@ noremap <buffer> <silent> $ g$
 " Tabbing
 set tabstop=4
 set shiftwidth=6
+
+
+" Visual Aids for Tabs and Whitespace
+set list listchars=tab:\|\ 
+highlight SpecialKey ctermfg=darkgrey
+highlight TrailingWhitespace ctermbg=red guibg=red
+highlight NotableCharacters ctermbg=green guibg=green
+match TrailingWhitespace /\s\+\%#\@<!$/
+
+" Extensions
+execute pathogen#infect()
+
