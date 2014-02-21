@@ -1,4 +1,5 @@
 set nocompatible
+filetype plugin on
 
 " Easily edit and reload the vimrc
 nmap <silent> <leader>ev :e  $MYVIMRC<CR>
