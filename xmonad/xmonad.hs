@@ -31,7 +31,7 @@ import XMonad.Actions.CycleWS
 -- List is searched in-order. First terminal found to be installed is used as
 -- default terminal. If no terminal from the list is found to be installed or
 -- the list is empty, xterm is used.
-preferredTerminal = ["gnome-terminal", "urxvt"]
+preferredTerminal = ["xfce4-terminal", "gnome-terminal", "urxvt"]
 
 -- menuBar
 -- List is searched in-order. First menu bar to be found to be installed is
@@ -63,10 +63,10 @@ myTerminal
 
 
 myStartupHook = do
-    setWMName "XMonad-Raith"
+    setWMName "LG3D"
     safeSpawn "xsetroot" ["-cursor_name", "left_ptr"]
 
-myManageHook = composeAll
+myManageHook = manageDocks <+> composeAll
     [ className =? "MPlayer"        --> doFloat
     , resource  =? "desktop_window" --> doIgnore
     , resource  =? "gnome-panel"    --> doIgnore
@@ -80,7 +80,7 @@ myHandleEventHook = mempty
 --myLogHook = return ()
 myLogHook = takeTopFocus
 
-myLayout = smartBorders $ avoidStruts $ layouts
+myLayout = smartBorders $ avoidStrutsOn [] $ layouts
     where
         layouts = tall
             ||| ThreeColMid 1 (3/100) (1/2)
@@ -120,6 +120,7 @@ myKeys = do
         , ("M-,",              sendMessage (IncMasterN 1))
         , ("M-.",              sendMessage (IncMasterN (-1)))
         --, ("M-S-q",            shutdownHook >> io exitSuccess)
+        , ("M-b",              sendMessage ToggleStruts)
         {- Recompile if necessary. Unless the compiler gave errors,
          - run shutdownHook and restart -}
         , ("M-q",              do
