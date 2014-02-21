@@ -27,6 +27,14 @@ highlight TrailingWhitespace ctermbg=red guibg=red
 highlight NotableCharacters ctermbg=green guibg=green
 match TrailingWhitespace /\s\+\%#\@<!$/
 
+
+" Margins
+" Warn of characters over 80 for coursework and 120 for real development
+highlight Over80CharsLong ctermbg=yellow
+highlight Over120CharsLong ctermbg=red
+au BufWinEnter * let w:m2=matchadd('Over80CharsLong', '\%>80v.\+', -1)
+au BufWinEnter * let w:m2=matchadd('Over120CharsLong', '\%>120v.\+', -1)
+
 " Extensions
 execute pathogen#infect()
 
