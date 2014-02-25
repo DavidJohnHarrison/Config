@@ -8,8 +8,9 @@
 # It's unfortunate that there's a manual installation step - in future, perhaps
 # I could search the bashrc for this and if it doesn't exist, append it.
 
-PATH="$HOME/.cabal/bin:$PATH"
+PATH="$HOME/bin:$HOME/.cabal/bin:$PATH"
 export PATH
 
 PS1='\n\w\n\u\$ '
 export PS1
+
