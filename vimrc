@@ -39,3 +39,26 @@ au BufWinEnter * let w:m2=matchadd('Over120CharsLong', '\%>120v.\+', -1)
 " Extensions
 execute pathogen#infect()
 
+" Automatically make on write
+function RunMake()
+	let currentDirectory = "./"
+	let makefile = "Makefile"
+	let gitDirectory = ".git"
+	let depth = 2
+	let continue = 1
+	while continue == 1
+		if filereadable(currentDirectory . makefile)
+			cd `=currentDirectory`
+			silent !make > /dev/null
+			let continue = 0
+			cd -
+		elseif isdirectory(currentDirectory . gitDirectory) || depth > 3
+			let continue = 0
+		else
+			let depth += 1
+			let currentDirectory = "../" . currentDirectory
+		endif
+	endwhile
+endfunction
+
+autocmd BufWritePost *.tex call RunMake()
