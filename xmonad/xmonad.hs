@@ -25,6 +25,7 @@ import XMonad.Util.EZConfig
 import XMonad.Util.Run hiding (safeRunInTerm)
 import XMonad.Layout.IndependentScreens
 import XMonad.Actions.CycleWS
+import System.Posix.Unistd
 
 -- ==== CONFIG =================================================================
 -- preferredTerminal
@@ -39,17 +40,22 @@ preferredTerminal = ["xfce4-terminal", "gnome-terminal", "urxvt"]
 -- is empty, no menu bar will be displayed.
 menuBar = []
 
+-- Mod Mask
+-- List of tuples (hostname, modmask). When xmonad is run, it will find the
+-- hostname and look up which modmask to use. If the hostname is not in the
+-- list below, it will use the "default" entry. If no "default" entry exists,
+-- it will fall back to using mod1Mask.
+myModMask = [("Zangetsu",    mod4Mask),
+             ("Helix",       mod1Mask),
+             ("default",     mod1Mask)]
+
 -- TODO
 myBorderWidth = 2
-
--- normalBorderColor
--- the Color
+myNormalColour = "#202020"
+myFocusedColour = "#ff0000"
 
 -- ==== LOGIC ==================================================================
 
-myNormalColour = "#202020"
-myFocusedColour = "#ff0000"
-myModMask = mod4Mask
 
 myTerminal
     = myTerminal' preferredTerminal
@@ -179,12 +185,13 @@ myConfig = do
     t <- myTerminal
     -- let t = myTerminal
     k <- myKeys
+    hostname <- getHostname
     return defaultConfig
         { normalBorderColor  = myNormalColour
         , focusedBorderColor = myFocusedColour
         , borderWidth        = myBorderWidth
         , focusFollowsMouse  = False
-        , modMask            = myModMask
+        , modMask            = getModMask myModMask hostname
         , terminal           = t
         , startupHook        = myStartupHook
         , manageHook         = myManageHook
@@ -194,6 +201,21 @@ myConfig = do
         , workspaces         = myWorkspaces
         , keys               = k
         }
+    where
+        getHostname :: IO String
+        getHostname = do
+            host <- getSystemID
+            return $ nodeName host
+
+getModMask (x:xs) hostname
+    | fst(x) == hostname = snd(x)
+    | otherwise          = getModMask xs hostname
+getModMask [] hostname
+    -- If we're searching for the default modmask, and we can't find it, just
+    -- fall back to mod1Mask
+    | hostname == "default" = mod1Mask
+	-- otherwise search for the default entry
+    | otherwise             = getModMask myModMask "default"
 
 main = do
            myConfig >>= xmonad
